@@ -1,6 +1,7 @@
 import sqlite3
 import os
 from flask import Flask, render_template, request, g, flash, abort, redirect, url_for, make_response
+from FDataBase import FDataBase
 
 # конфигурация
 DATABASE = '/tmp/flsite.db'
@@ -37,7 +38,8 @@ def get_db():
 @app.route("/")
 def index():
     db = get_db()
-    return render_template('index.html', menu=[])
+    dbase = FDataBase(db)
+    return render_template('index.html', menu=dbase.getMenu())
 
 
 @app.teardown_appcontext
