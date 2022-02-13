@@ -9,7 +9,7 @@ SECRET_KEY = 'fdgfh78@#5?>gfhf89dx,v06k'
 
 app = Flask(__name__)
 app.config.from_object(__name__)
-app.config.update(dict(DATABASE=os.path.join(app.root_path,'flsite.db')))
+app.config.update(dict(DATABASE=os.path.join(app.root_path, 'flsite.db')))
 
 
 def connect_db():
@@ -25,3 +25,27 @@ def create_db():
         db.cursor().executescript(f.read())
     db.commit()
     db.close()
+
+
+def get_db():
+    """ Соединение с БД, если оно ещё не установлено"""
+    if not hasattr(g, 'link_db'):
+        g.link_db = connect_db()
+    return g.link_db
+
+
+@app.route("/")
+def index():
+    db = get_db()
+    return render_template('index.html', menu=[])
+
+
+@app.teardown_appcontext
+def close_db(error):
+    """ Закрываем соединение с БД, если оно было установлено"""
+    if hasattr(g, 'link_db'):
+        g.link_db.close()
+
+
+if __name__ == '__main__':
+    app.run(debug=True)
