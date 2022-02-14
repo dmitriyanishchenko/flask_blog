@@ -49,5 +49,22 @@ def close_db(error):
         g.link_db.close()
 
 
+@app.route("/add_post", methods=["POST", "GET"])
+def addPost():
+    db = get_db()
+    dbase = FDataBase(db)
+
+    if request.method == "POST":
+        if len(request.form['name']) > 4 and len(request.form['post']) > 10:
+            res = dbase.addPost(request.form['name'], request.form['post'])
+            if not res:
+                flash('Ошибка добавления статьи', category='error')
+            else:
+                flash ('Статья добавлена успешно', category='success')
+        else:
+            flash('Ошибка добавления статьи', category='error')
+
+    return render_template('add_post.html', menu = dbase.getMenu(), title="Добавление статьи")
+
 if __name__ == '__main__':
     app.run(debug=True)
