@@ -78,6 +78,5 @@ def showPost(id_post):
     return render_template('post.html', menu=dbase.getMenu(), title=title, post=post)
 
 
-
 if __name__ == '__main__':
     app.run(debug=True)
