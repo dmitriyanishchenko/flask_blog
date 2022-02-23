@@ -67,11 +67,12 @@ def addPost():
     return render_template('add_post.html', menu=dbase.getMenu(), title="Добавление статьи")
 
 
-@app.route("/post/<int:id_post>")
-def showPost(id_post):
+# @app.route("/post/<int:id_post>")
+@app.route("/post/<alias>")
+def showPost(alias):
     db = get_db()
     dbase = FDataBase(db)
-    title, post = dbase.getPost(id_post)
+    title, post = dbase.getPost(alias)
     if not title:
         abort(404)
 
