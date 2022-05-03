@@ -60,11 +60,11 @@ def addPost():
             if not res:
                 flash('Ошибка добавления статьи', category='error')
             else:
-                flash ('Статья добавлена успешно', category='success')
+                flash('Статья добавлена успешно', category='success')
         else:
             flash('Ошибка добавления статьи', category='error')
 
-    return render_template('add_post.html', menu = dbase.getMenu(), title="Добавление статьи")
+    return render_template('add_post.html', menu=dbase.getMenu(), title="Добавление статьи")
 
 
 @app.route("/post/<alias>")

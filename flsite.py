@@ -15,7 +15,6 @@ def index():
     return render_template('index.html', menu=menu)
 
 
-
 @app.route('/about')
 def about():
     print(url_for('about'))
