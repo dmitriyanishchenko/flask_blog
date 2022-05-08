@@ -64,4 +64,3 @@ class FDataBase:
             print("Ошибка получения статьи из БД " + str(e))
 
         return []
-

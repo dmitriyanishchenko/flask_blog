@@ -1,6 +1,6 @@
 import sqlite3
 import os
-from flask import Flask, render_template, request, g, flash, abort, redirect, url_for, make_response
+from flask import Flask, render_template, request, g, flash, abort
 from FDataBase import FDataBase
 
 # конфигурация
@@ -35,11 +35,15 @@ def get_db():
     return g.link_db
 
 
-@app.route("/")
-def index():
+dbase = None
+
+
+@app.before_request
+def before_request():
+    """ Установление соединения с БД перед выполнением запроса"""
+    global dbase
     db = get_db()
     dbase = FDataBase(db)
-    return render_template('index.html', menu=dbase.getMenu(), posts=dbase.getPostsAnonce())
 
 
 @app.teardown_appcontext
@@ -49,11 +53,13 @@ def close_db(error):
         g.link_db.close()
 
 
+@app.route("/")
+def index():
+    return render_template('index.html', menu=dbase.getMenu(), posts=dbase.getPostsAnonce())
+
+
 @app.route("/add_post", methods=["POST", "GET"])
 def addPost():
-    db = get_db()
-    dbase = FDataBase(db)
-
     if request.method == "POST":
         if len(request.form['name']) > 4 and len(request.form['post']) > 10:
             res = dbase.addPost(request.form['name'], request.form['post'], request.form['url'])
@@ -69,8 +75,6 @@ def addPost():
 
 @app.route("/post/<alias>")
 def showPost(alias):
-    db = get_db()
-    dbase = FDataBase(db)
     title, post = dbase.getPost(alias)
     if not title:
         abort(404)
