@@ -1,14 +1,13 @@
 import sqlite3
+from app import app
 import os
-from flask import Flask, render_template, request, g, flash, abort
+from flask import render_template, request, g, flash, abort
 from FDataBase import FDataBase
 
 # конфигурация
 DATABASE = '/tmp/flsite.db'
-DEBUG = True
 SECRET_KEY = 'fdgfh78@#5?>gfhf89dx,v06k'
 
-app = Flask(__name__)
 app.config.from_object(__name__)
 app.config.update(dict(DATABASE=os.path.join(app.root_path, 'flsite.db')))
 
