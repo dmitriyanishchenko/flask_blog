@@ -20,7 +20,9 @@ def connect_db():
 
 
 def create_db():
-    """Вспомогательная функция для создания таблиц БД"""
+    """
+    Вспомогательная функция для создания таблиц БД
+    """
     db = connect_db()
     with app.open_resource('sq_db.sql', mode='r') as f:
         db.cursor().executescript(f.read())
@@ -80,6 +82,16 @@ def showPost(alias):
         abort(404)
 
     return render_template('post.html', menu=dbase.getMenu(), title=title, post=post)
+
+
+@app.route("/login")
+def login():
+    return render_template('login.html', menu=dbase.getMenu(), title="Авторизация")
+
+
+@app.route("/register")
+def register():
+    return render_template('register.html', menu=dbase.getMenu(), title="Регистрация")
 
 
 if __name__ == '__main__':
