@@ -3,14 +3,17 @@ from app import app
 import os
 from flask import render_template, request, g, flash, abort
 from FDataBase import FDataBase
+from flask_login import LoginManager
 
 # конфигурация
 DATABASE = '/tmp/flsite.db'
 SECRET_KEY = 'fdgfh78@#5?>gfhf89dx,v06k'
+MAX_CONTENT_LENGTH = 1024 * 1024
 
 app.config.from_object(__name__)
 app.config.update(dict(DATABASE=os.path.join(app.root_path, 'flsite.db')))
 
+login_manager = LoginManager(app)
 
 def connect_db():
     conn = sqlite3.connect(app.config['DATABASE'])
