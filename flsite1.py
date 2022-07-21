@@ -3,7 +3,7 @@ from app import app
 import os
 from flask import render_template, request, g, flash, abort
 from FDataBase import FDataBase
-from flask_login import LoginManager
+# from flask_login import UserLogin
 
 # конфигурация
 DATABASE = '/tmp/flsite.db'
@@ -13,7 +13,8 @@ MAX_CONTENT_LENGTH = 1024 * 1024
 app.config.from_object(__name__)
 app.config.update(dict(DATABASE=os.path.join(app.root_path, 'flsite.db')))
 
-login_manager = LoginManager(app)
+# login_manager = LoginManager(app)
+
 
 def connect_db():
     conn = sqlite3.connect(app.config['DATABASE'])
@@ -63,7 +64,7 @@ def index():
 
 
 @app.route("/add_post", methods=["POST", "GET"])
-def addPost():
+def addPost() -> str:
     if request.method == "POST":
         if len(request.form['name']) > 4 and len(request.form['post']) > 10:
             res = dbase.addPost(request.form['name'], request.form['post'], request.form['url'])
