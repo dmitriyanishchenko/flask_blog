@@ -1,8 +1,10 @@
 import sqlite3
 from app import app
 import os
-from flask import render_template, request, g, flash, abort
+from flask import render_template, request, g, flash, abort, redirect, url_for
 from FDataBase import FDataBase
+from werkzeug.security import generate_password_hash, check_password_hash
+
 # from flask_login import UserLogin
 
 # конфигурация
@@ -12,6 +14,7 @@ MAX_CONTENT_LENGTH = 1024 * 1024
 
 app.config.from_object(__name__)
 app.config.update(dict(DATABASE=os.path.join(app.root_path, 'flsite.db')))
+
 
 # login_manager = LoginManager(app)
 
@@ -92,9 +95,22 @@ def login():
     return render_template('login.html', menu=dbase.getMenu(), title="Авторизация")
 
 
-@app.route("/register")
+@app.route("/register", methods=["POST", "GET"])
 def register():
-    return render_template('register.html', menu=dbase.getMenu(), title="Регистрация")
+    if request.method == "POST":
+        if len(request.form['name']) > 4 and len(request.form['email']) > 4 \
+            and len(request.form['psw']) > 4 and request.form['psw'] == request.form['psw2']:
+            hash = generate_password_hash(request.form['psw'])
+            res = dbase.addUser(request.form['name'], request.form['email'], hash)
+            if res:
+                flash("Вы успешно зарегистрированы", "success")
+                return redirect(url_for('login'))
+            else:
+                flash("Ошибка при добавлении в БД", "error")
+        else:
+            flash("Неверно заполнены поля", "error")
+
+    return render_template("register.html", menu=dbase.getMenu(), title="Регистрация")
 
 
 if __name__ == '__main__':
