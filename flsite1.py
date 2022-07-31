@@ -7,8 +7,6 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import LoginManager, login_user, login_required, current_user, logout_user
 from UserLogin import UserLogin
 
-# from flask_login import UserLogin
-
 # конфигурация
 DATABASE = '/tmp/flsite.db'
 SECRET_KEY = 'fdgfh78@#5?>gfhf89dx,v06k'
@@ -21,6 +19,7 @@ login_manager = LoginManager(app)
 login_manager.login_view = 'login'
 login_manager.login_message = "Авторизуйтесь для доступа к закрытым страницам"
 login_manager.login_message_category = "success"
+
 
 @login_manager.user_loader
 def load_user(user_id):
