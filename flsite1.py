@@ -1,3 +1,5 @@
+# from flask_wtf import Form
+
 import sqlite3
 from app import app
 import os
@@ -6,6 +8,7 @@ from FDataBase import FDataBase
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import LoginManager, login_user, login_required, current_user, logout_user
 from UserLogin import UserLogin
+from forms import LoginForm
 
 # конфигурация
 DATABASE = '/tmp/flsite.db'
@@ -104,17 +107,18 @@ def login():
     if current_user.is_authenticated:
         return redirect(url_for('profile'))
 
-    if request.method == "POST":
-        user = dbase.getUserByEmail(request.form['email'])
-        if user and check_password_hash(user['psw'], request.form['psw']):
-            userlogin = UserLogin().create(user)
-            rm = True if request.form.get('remainme') else False
-            login_user(userlogin, remember=rm)
-            return redirect(request.args.get('next') or url_for('profile'))
+    form = LoginForm()
+    return render_template("login.html", menu=dbase.getMenu(), title="Авторизация", form=form)
 
-        flash("Неверная пара логин/пароль", "error")
-
-    return render_template("login.html", menu=dbase.getMenu(), title="Авторизация")
+    # if request.method == "POST":
+    #     user = dbase.getUserByEmail(request.form['email'])
+    #     if user and check_password_hash(user['psw'], request.form['psw']):
+    #         userlogin = UserLogin().create(user)
+    #         rm = True if request.form.get('remainme') else False
+    #         login_user(userlogin, remember=rm)
+    #         return redirect(request.args.get('next') or url_for('profile'))
+    #
+    #     flash("Неверная пара логин/пароль", "error")
 
 
 @app.route("/register", methods=["POST", "GET"])
