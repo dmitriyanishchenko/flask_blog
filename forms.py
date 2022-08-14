@@ -1,9 +1,9 @@
-from wtforms import StringField, SubmitField, BooleanField, PasswordField
+import wtforms
 from wtforms.validators import DataRequired, Email, Length
 
 
 class LoginForm:
-    email = StringField("Email: ", validators=[Email()])
-    psw = PasswordField("Пароль: ", validators=[DataRequired(), Length(min=4, max=100)])
-    remember = BooleanField("Запомнить", default=False)
-    submit = SubmitField("Войти")
+    email = wtforms.StringField("Email: ", validators=[Email()])
+    psw = wtforms.PasswordField("Пароль: ", validators=[DataRequired(), Length(min=4, max=100)])
+    remember = wtforms.BooleanField("Запомнить", default=False)
+    submit = wtforms.SubmitField("Войти")
